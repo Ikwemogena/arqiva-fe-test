@@ -52,7 +52,7 @@ const paginationRange = computed(() => {
 
 <template>
   <div class="pagination" v-if="totalPages > 1">
-    <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
+    <button v-show="currentPage > 1" @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
       Prev
     </button>
 
@@ -66,7 +66,7 @@ const paginationRange = computed(() => {
       {{ item }}
     </button>
 
-    <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">
+    <button v-show="currentPage < 1" @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">
       Next
     </button>
   </div>
