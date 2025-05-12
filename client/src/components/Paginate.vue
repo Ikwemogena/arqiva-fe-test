@@ -19,24 +19,54 @@ const goToPage = (page: number) => {
     emit('update:page', page)
   }
 }
+
+const paginationRange = computed(() => {
+  const total = totalPages.value
+  const current = props.currentPage
+  const delta = 2
+  const range = []
+  const left = Math.max(2, current - delta)
+  const right = Math.min(total - 1, current + delta)
+
+  range.push(1)
+
+  if (left > 2) {
+    range.push('...')
+  }
+
+  for (let i = left; i <= right; i++) {
+    range.push(i)
+  }
+
+  if (right < total - 1) {
+    range.push('...')
+  }
+
+  if (total > 1) {
+    range.push(total)
+  }
+
+  return range
+})
 </script>
 
 <template>
   <div class="pagination" v-if="totalPages > 1">
-    <button v-show="currentPage > 1" @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
+    <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
       Prev
     </button>
 
     <button
-        v-for="page in totalPages"
-        :key="page"
-        @click="goToPage(page)"
-        :class="{ active: page === currentPage }"
+        v-for="(item, index) in paginationRange"
+        :key="index"
+        :disabled="item === '...'"
+        @click="typeof item === 'number' && goToPage(item)"
+        :class="{ active: item === currentPage }"
     >
-      {{ page }}
+      {{ item }}
     </button>
 
-    <button v-show="currentPage < totalPages" @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">
+    <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">
       Next
     </button>
   </div>
