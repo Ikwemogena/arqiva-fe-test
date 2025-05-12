@@ -8,6 +8,7 @@ import FormInput from "../components/ui/Form/FormInput.vue";
 import FormSelect from "../components/ui/Form/FormSelect.vue";
 import FormDatePicker from "../components/ui/Form/FormDatePicker.vue";
 import type { Contribution } from "../types/contribution";
+import Paginate from "../components/Paginate.vue";
 
 interface ApiResponse {
   contributions: Contribution[];
@@ -20,6 +21,10 @@ const router = useRouter()
 const params = ref(sanitizeQuery(useRoute().query))
 const contributions = ref<Contribution[]>([])
 const showAdvancedFilters = ref(false)
+
+const total = ref(0)
+const limit = ref(0)
+const currentPage = ref(1)
 
 const sortOptions = [
   { value: 'id', label: 'ID' },
@@ -46,7 +51,7 @@ const updateSearch = (field: string, value: any) => {
 
 const resetFilters = () => {
   setTimeout(() => {
-    params.value = sanitizeQuery({limit: params.value.limit})
+    params.value = sanitizeQuery({limit: params.value.limit, order_by: 'id'})
   }, 300)
 }
 
@@ -59,6 +64,8 @@ const fetchContributions = async () => {
       try {
         const parsed = JSON.parse(data.value)
         contributions.value = parsed.contributions
+        total.value = parsed.total
+        limit.value = parsed.limit
       } catch (e) {
         console.error('Failed to parse response:', e)
       }
@@ -66,6 +73,11 @@ const fetchContributions = async () => {
       contributions.value = data.value.contributions
     }
   }
+}
+
+const pageTrigger = (page: number) => {
+  currentPage.value = page
+  params.value.skip = (page - 1) * limit.value
 }
 
 watchEffect(() => {
@@ -142,6 +154,15 @@ onMounted(() => {
         <ContributionCard v-for="(contribution, index) in contributions" :key="index" :contribution="contribution" />
       </div>
       <div v-else class="no-results">{{ noResultCopy }}</div>
+    </div>
+
+    <div style="position: relative; bottom: 10px; display: flex; justify-content: center;" v-if="contributions.length">
+      <Paginate
+          :total="total"
+          :limit="limit"
+          :currentPage="currentPage"
+          @update:page="pageTrigger"
+      />
     </div>
   </div>
 </template>
