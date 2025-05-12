@@ -1,36 +1,35 @@
 <script setup lang="ts">
-import IconCalendar from "@/components/icons/IconCalendar.vue";
-import IconUser from "@/components/icons/IconUser.vue";
 
-const title = "Global Economic Insights";
-const description = "In-depth analysis of the latest economic trends around the world.";
-const owner = "Global News Network";
-const status = "Completed";
-const startTime = new Date("2023-09-15T08:00:00");
-const endTime = new Date("2023-09-15T10:00:00");
+import IconCalendar from "../icons/IconCalendar.vue";
+import IconUser from "../icons/IconUser.vue";
+import type { Contribution } from "../../types/contribution";
+
+defineProps<{
+  contribution: Contribution;
+}>()
 </script>
 
 <template>
   <div class="contribution__card">
     <div style="display: flex; flex-direction: column; gap: 0.4rem">
       <div class="contribution__header">
-        <h1 class="contribution__card-title">{{ title }}</h1>
+        <h3 class="contribution__card-title">{{ contribution.title }}</h3>
         <div>
-          <p class="status" :class="status.toLowerCase()">{{ status }}</p>
+<!--          <p class="status" :class="status.toLowerCase()">{{ status }}</p>-->
         </div>
       </div>
-      <p class="contribution__card-description">{{ description }}</p>
+      <p class="contribution__card-description">{{ contribution.description }}</p>
     </div>
 
     <div style="display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.9rem">
       <div style="display: flex; align-items: center; gap: 0.5rem;">
         <IconCalendar />
-        <p>{{ startTime.toDateString() }} - {{ endTime.toDateString() }}</p>
+        <p>{{ contribution.startTime }} - {{ contribution.endTime }}</p>
       </div>
 
       <div style="display: flex; align-items: center; gap: 0.5rem;">
         <IconUser />
-        <p>{{ owner }}</p>
+        <p>{{ contribution.owner }}</p>
       </div>
     </div>
   </div>
@@ -41,13 +40,14 @@ const endTime = new Date("2023-09-15T10:00:00");
   background-color: #f9f9f9;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 1rem;
-  padding: 1.5rem;
-  width: 24rem;
+  padding: 1.2rem;
+  width: 100%;
   border: 1px solid #ccc;
   border-radius: 0.75rem;
   cursor: pointer;
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.2s ease;
 }
 
 .contribution__card:hover {
@@ -61,7 +61,7 @@ const endTime = new Date("2023-09-15T10:00:00");
 }
 
 .contribution__card-title {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: bold;
   color: #333;
   margin: 0;
