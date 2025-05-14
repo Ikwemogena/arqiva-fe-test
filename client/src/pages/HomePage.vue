@@ -116,7 +116,11 @@ onMounted(() => {
   <div>
     <div class="search-container">
       <div class="search-row">
-        <FormInput v-debounce:300ms="(val) => updateSearch('title', val)" placeholder="Search by title" :value="params.title" />
+        <FormInput
+            v-debounce:300ms="(val) => updateSearch('title', val)"
+            placeholder="Search by title"
+            :value="params.title"
+        />
         <button class="toggle-filters" @click="showAdvancedFilters = !showAdvancedFilters">
           {{ showAdvancedFilters ? 'Hide' : 'Show' }} Advanced Filters
         </button>
@@ -125,32 +129,56 @@ onMounted(() => {
       <Transition name="slide" mode="out-in">
         <div v-if="showAdvancedFilters" class="advanced-filters">
           <div class="filter-row">
-            <FormInput v-debounce:300ms="(val) => updateSearch('description', val)" placeholder="Filter by description" :value="params.description" />
-            <FormInput v-debounce:300ms="(val) => updateSearch('owner', val)" placeholder="Filter by owner" :value="params.owner" />
+            <FormInput
+                v-debounce:300ms="(val) => updateSearch('description', val)"
+                placeholder="Filter by description"
+                :value="params.description"
+            />
+            <FormInput
+                v-debounce:300ms="(val) => updateSearch('owner', val)"
+                placeholder="Filter by owner"
+                :value="params.owner"
+            />
           </div>
 
           <div class="filter-row">
             <div class="date-range">
               <div>
                 <span>Start date before:</span>
-                <FormDatePicker v-model="params.startBefore" @update:model-value="(val) => updateSearch('startBefore', val)" placeholder="From" />
+                <FormDatePicker
+                    v-model="params.startBefore"
+                    @update:model-value="(val) => updateSearch('startBefore', val)"
+                    placeholder="From"
+                />
               </div>
 
               <div>
                 <span>Start date after:</span>
-                <FormDatePicker v-model="params.startAfter" @update:model-value="(val) => updateSearch('startAfter', val)" placeholder="To" />
+                <FormDatePicker
+                    v-model="params.startAfter"
+                    @update:model-value="(val) => updateSearch('startAfter', val)"
+                    placeholder="To"
+                />
               </div>
             </div>
 
             <div class="date-range">
               <div>
                 <span>End date before:</span>
-                <FormDatePicker v-model="params.endBefore" @update:model-value="(val) => updateSearch('endBefore', val)" placeholder="From" />
+                <FormDatePicker
+                    v-model="params.endBefore"
+                    @update:model-value="(val) => updateSearch('endBefore', val)"
+                    placeholder="From"
+                />
               </div>
 
-               <div>
+              <div>
                 <span>End date after:</span>
-                <FormDatePicker v-model="params.endAfter" @update:model-value="(val) => updateSearch('endAfter', val)" placeholder="To" />
+                <FormDatePicker
+                    v-model="params.endAfter"
+                    @update:model-value="(val) => updateSearch('endAfter', val)"
+                    placeholder="To"
+                />
               </div>
             </div>
           </div>
@@ -163,8 +191,9 @@ onMounted(() => {
                   v-model:selected="params.order_by"
               />
             </div>
-
-            <button class="reset-button" @click="resetFilters">Reset All Filters</button>
+            <button class="reset-button" @click="resetFilters">
+              Reset All Filters
+            </button>
           </div>
         </div>
       </Transition>
@@ -172,12 +201,18 @@ onMounted(() => {
 
     <div class="content-container">
       <div class="contributions__grid" v-if="contributions.length">
-        <ContributionCard v-for="contribution in contributions" :key="contribution.id" :contribution="contribution" />
+        <ContributionCard
+            v-for="(contribution, index) in contributions"
+            :key="index"
+            :contribution="contribution"
+        />
       </div>
-      <div v-else class="no-results">{{ noResultCopy }}</div>
+      <div v-else class="no-results">
+        {{ noResultCopy }}
+      </div>
     </div>
 
-    <div style="position: relative; bottom: 10px; display: flex; justify-content: center;" v-if="contributions.length">
+    <div class="pagination-wrapper" v-if="contributions.length">
       <Paginate
           :total="total"
           :limit="limit"
@@ -272,6 +307,14 @@ onMounted(() => {
   gap: 1rem;
   grid-template-columns: 1fr;
 }
+
+.pagination-wrapper {
+  position: relative;
+  bottom: 10px;
+  display: flex;
+  justify-content: center;
+}
+
 
 .slide-enter-active, .slide-leave-active {
   transition: all 0.3s ease;
