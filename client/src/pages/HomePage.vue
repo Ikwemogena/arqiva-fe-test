@@ -122,15 +122,27 @@ onMounted(() => {
 
           <div class="filter-row">
             <div class="date-range">
-              <span>Start date range:</span>
-              <FormDatePicker v-model="params.startBefore" @update:model-value="(val) => updateSearch('startBefore', val)" placeholder="From" />
-              <FormDatePicker v-model="params.startAfter" @update:model-value="(val) => updateSearch('startAfter', val)" placeholder="To" />
+              <div>
+                <span>Start date before:</span>
+                <FormDatePicker v-model="params.startBefore" @update:model-value="(val) => updateSearch('startBefore', val)" placeholder="From" />
+              </div>
+
+              <div>
+                <span>Start date after:</span>
+                <FormDatePicker v-model="params.startAfter" @update:model-value="(val) => updateSearch('startAfter', val)" placeholder="To" />
+              </div>
             </div>
 
             <div class="date-range">
-              <span>End date range:</span>
-              <FormDatePicker v-model="params.endBefore" @update:model-value="(val) => updateSearch('endBefore', val)" placeholder="From" />
-              <FormDatePicker v-model="params.endAfter" @update:model-value="(val) => updateSearch('endAfter', val)" placeholder="To" />
+              <div>
+                <span>End date before:</span>
+                <FormDatePicker v-model="params.endBefore" @update:model-value="(val) => updateSearch('endBefore', val)" placeholder="From" />
+              </div>
+
+               <div>
+                <span>End date after:</span>
+                <FormDatePicker v-model="params.endAfter" @update:model-value="(val) => updateSearch('endAfter', val)" placeholder="To" />
+              </div>
             </div>
           </div>
 
@@ -207,6 +219,10 @@ onMounted(() => {
   flex-wrap: wrap;
 }
 
+.filter-row.date {
+  flex-direction: column;
+}
+
 .date-range {
   display: flex;
   align-items: center;
@@ -216,7 +232,7 @@ onMounted(() => {
 
 .sort-option {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 0.5rem;
 }
 
