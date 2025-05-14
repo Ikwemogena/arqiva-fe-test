@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch, watchEffect } from "vue";
+import { ref, computed, onMounted, watch, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { sanitizeQuery } from "../utils/object.ts";
 import ContributionCard from "../components/ui/ContributionCard.vue";
 import FormInput from "../components/ui/Form/FormInput.vue";
 import FormSelect from "../components/ui/Form/FormSelect.vue";
 import FormDatePicker from "../components/ui/Form/FormDatePicker.vue";
-import type { Contribution } from "../types/contribution";
 import Paginate from "../components/Paginate.vue";
+import type { Contribution } from "../types/contribution";
 
 interface ApiResponse {
   contributions: Contribution[];
@@ -16,92 +16,100 @@ interface ApiResponse {
   limit: number;
 }
 
-const router = useRouter()
-const params = ref(sanitizeQuery(useRoute().query))
-const contributions = ref<Contribution[]>([])
-const showAdvancedFilters = ref(false)
+const router = useRouter();
+const route = useRoute();
 
-const total = ref(0)
-const limit = ref(0)
-const currentPage = ref(1)
+const params = ref(sanitizeQuery(route.query));
+const contributions = ref<Contribution[]>([]);
+const showAdvancedFilters = ref(false);
+
+const total = ref(0);
+const limit = ref(0);
+const currentPage = ref(1);
 
 const sortOptions = [
-  { value: 'id', label: 'ID' },
-  { value: 'title', label: 'Title' },
-  { value: 'description', label: 'Description' },
-  { value: 'startTime', label: 'Start Time' },
-  { value: 'endTime', label: 'End Time' },
-  { value: 'owner', label: 'Owner' }
-]
+  { value: "id", label: "ID" },
+  { value: "title", label: "Title" },
+  { value: "description", label: "Description" },
+  { value: "startTime", label: "Start Time" },
+  { value: "endTime", label: "End Time" },
+  { value: "owner", label: "Owner" },
+];
 
 const noResultCopy = computed(() => {
-  if ((params.value.title || params.value.description || params.value.owner) && !contributions.value.length) {
-    return `No contributions found for your search criteria`
+  const { title, description, owner } = params.value;
+  if ((title || description || owner) && contributions.value.length === 0) {
+    return "No contributions found for your search criteria";
   }
-
-  if (!contributions.value.length) {
-    return 'No contributions found'
+  if (contributions.value.length === 0) {
+    return "No contributions found";
   }
-})
+  return "";
+});
 
 const updateSearch = (field: string, value: any) => {
-  params.value = sanitizeQuery({ ...params.value, ...{ [field]: value, page: undefined } })
-}
+  params.value = sanitizeQuery({
+    ...params.value,
+    [field]: value,
+    page: undefined,
+  });
+};
 
 const resetFilters = () => {
   setTimeout(() => {
-    params.value = sanitizeQuery({limit: params.value.limit, order_by: 'id'})
-  }, 300)
-}
+    params.value = sanitizeQuery({
+      limit: params.value.limit,
+      order_by: "id",
+    });
+  }, 300);
+};
 
 const fetchContributions = async () => {
-  const url = `http://127.0.0.1:8000/contributions/?${new URLSearchParams(params.value)}`;
-  const response = await fetch(url)
-  const data = await response.json() as ApiResponse
-  contributions.value = data.contributions
-  total.value = data.total
-  limit.value = data.limit
-  currentPage.value = params.value.page || 1
-}
+  const queryString = new URLSearchParams(params.value as any).toString();
+  const url = `http://127.0.0.1:8000/contributions/?${queryString}`;
+
+  const response = await fetch(url);
+  const data = (await response.json()) as ApiResponse;
+
+  contributions.value = data.contributions;
+  total.value = data.total;
+  limit.value = data.limit;
+  currentPage.value = params.value.page || 1;
+};
 
 const pageTrigger = (page: number) => {
-  currentPage.value = page
+  currentPage.value = page;
   params.value = {
     ...params.value,
-    page: page,
-    skip: (page - 1) * limit.value
-  }
-}
+    page,
+    skip: (page - 1) * limit.value,
+  };
+};
 
 watchEffect(() => {
-  router.push({
-    query: {
-      ...params.value
-    }
-  })
-})
+  router.push({ query: { ...params.value } });
+});
 
-watch(params, () => {
-  fetchContributions()
-}, {deep: true})
+watch(
+    params,
+    () => {
+      fetchContributions();
+    },
+    { deep: true }
+);
 
 onMounted(() => {
-  fetchContributions()
-  if(!params.value.limit) {
-    params.value = { ...params.value, ...{ limit: 14 } }
-  }
-  if(!params.value.order_by) {
-    params.value = { ...params.value, ...{ order_by: 'id' } }
-  }
-  if(!params.value.page) {
-    params.value = { ...params.value, ...{ page: 1 } }
-  }
+  fetchContributions();
 
-  if(params.value.page) {
-    currentPage.value = params.value.page
-    params.value = { ...params.value, ...{ skip: (params.value.page - 1) * params.value.limit } }
+  if (!params.value.limit) params.value.limit = 14;
+  if (!params.value.order_by) params.value.order_by = "id";
+  if (!params.value.page) params.value.page = 1;
+
+  if (params.value.page) {
+    currentPage.value = params.value.page;
+    params.value.skip = (params.value.page - 1) * params.value.limit;
   }
-})
+});
 </script>
 
 <template>
@@ -164,7 +172,7 @@ onMounted(() => {
 
     <div class="content-container">
       <div class="contributions__grid" v-if="contributions.length">
-        <ContributionCard v-for="(contribution, index) in contributions" :key="index" :contribution="contribution" />
+        <ContributionCard v-for="contribution in contributions" :key="contribution.id" :contribution="contribution" />
       </div>
       <div v-else class="no-results">{{ noResultCopy }}</div>
     </div>
