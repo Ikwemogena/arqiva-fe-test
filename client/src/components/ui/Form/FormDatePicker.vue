@@ -106,8 +106,8 @@ const handleBlur = () => {
 
 .date-icon {
   position: absolute;
-  right: 10px;
-  top: 50%;
+  right: 7px;
+  top: 57%;
   transform: translateY(-50%);
   pointer-events: none;
   color: #718096;
