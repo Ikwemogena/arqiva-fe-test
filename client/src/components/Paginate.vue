@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import {scrollToTop} from "../utils/scroll.ts";
 
 interface Props {
   total: number
@@ -18,6 +19,7 @@ const goToPage = (page: number) => {
   if (page >= 1 && page <= totalPages.value) {
     emit('update:page', page)
   }
+  scrollToTop()
 }
 
 const paginationRange = computed(() => {
@@ -66,7 +68,7 @@ const paginationRange = computed(() => {
       {{ item }}
     </button>
 
-    <button v-show="currentPage < 1" @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">
+    <button v-show="currentPage < totalPages" @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">
       Next
     </button>
   </div>
