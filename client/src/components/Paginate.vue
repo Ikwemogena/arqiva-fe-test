@@ -53,28 +53,49 @@ const paginationRange = computed(() => {
 </script>
 
 <template>
-  <div class="pagination" v-if="totalPages > 1">
-    <button v-show="currentPage > 1" @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
-      Prev
-    </button>
+  <div class="pagination-wrapper" v-if="totalPages > 1">
+    <div class="pagination">
+      <button v-show="currentPage > 1" @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
+        Prev
+      </button>
 
-    <button
-        v-for="(item, index) in paginationRange"
-        :key="index"
-        :disabled="item === '...'"
-        @click="typeof item === 'number' && goToPage(item)"
-        :class="{ active: item === currentPage }"
-    >
-      {{ item }}
-    </button>
+      <button
+          v-for="(item, index) in paginationRange"
+          :key="index"
+          :disabled="item === '...'"
+          @click="typeof item === 'number' && goToPage(item)"
+          :class="{ active: item === currentPage }"
+      >
+        {{ item }}
+      </button>
 
-    <button v-show="currentPage < totalPages" @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">
-      Next
-    </button>
+      <button v-show="currentPage < totalPages" @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">
+        Next
+      </button>
+    </div>
+
+    <div class="go-to-page" v-if="true">
+      <label for="page-select">Go to page:</label>
+      <select id="page-select" :value="currentPage" @change="goToPage($event?.target.value)">
+        <option v-for="page in totalPages" :key="page" :value="page">
+          {{ page }}
+        </option>
+      </select>
+    </div>
   </div>
 </template>
 
+
 <style scoped>
+.pagination-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
 .pagination {
   display: flex;
   align-items: center;
@@ -83,6 +104,21 @@ const paginationRange = computed(() => {
   padding: 0.5rem 1rem;
   border-radius: 1rem;
   gap: 0.5rem;
+}
+
+.go-to-page {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+select {
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.375rem;
+  border: 1px solid #cbd5e1;
+  background: white;
+  font-weight: 500;
 }
 
 button {
