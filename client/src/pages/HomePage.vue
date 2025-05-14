@@ -77,7 +77,11 @@ const fetchContributions = async () => {
 
 const pageTrigger = (page: number) => {
   currentPage.value = page
-  params.value.skip = (page - 1) * limit.value
+  params.value = {
+    ...params.value,
+    page: page,
+    skip: (page - 1) * limit.value
+  }
 }
 
 watchEffect(() => {
@@ -99,6 +103,14 @@ onMounted(() => {
   }
   if(!params.value.order_by) {
     params.value = { ...params.value, ...{ order_by: 'id' } }
+  }
+  if(!params.value.page) {
+    params.value = { ...params.value, ...{ page: 1 } }
+  }
+
+  if(params.value.page) {
+    currentPage.value = params.value.page
+    params.value = { ...params.value, ...{ skip: (params.value.page - 1) * params.value.limit } }
   }
 })
 </script>
