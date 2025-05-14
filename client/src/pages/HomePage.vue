@@ -123,14 +123,14 @@ onMounted(() => {
           <div class="filter-row">
             <div class="date-range">
               <span>Start date range:</span>
-              <FormDatePicker v-model="params.startTime_gt" @update:model-value="(val) => updateSearch('startTime_gt', val)" placeholder="From" />
-              <FormDatePicker v-model="params.startTime_lt" @update:model-value="(val) => updateSearch('startTime_lt', val)" placeholder="To" />
+              <FormDatePicker v-model="params.startBefore" @update:model-value="(val) => updateSearch('startBefore', val)" placeholder="From" />
+              <FormDatePicker v-model="params.startAfter" @update:model-value="(val) => updateSearch('startAfter', val)" placeholder="To" />
             </div>
 
             <div class="date-range">
               <span>End date range:</span>
-              <FormDatePicker v-model="params.endTime_gt" @update:model-value="(val) => updateSearch('endTime_gt', val)" placeholder="From" />
-              <FormDatePicker v-model="params.endTime_lt" @update:model-value="(val) => updateSearch('endTime_lt', val)" placeholder="To" />
+              <FormDatePicker v-model="params.endBefore" @update:model-value="(val) => updateSearch('endBefore', val)" placeholder="From" />
+              <FormDatePicker v-model="params.endAfter" @update:model-value="(val) => updateSearch('endAfter', val)" placeholder="To" />
             </div>
           </div>
 
