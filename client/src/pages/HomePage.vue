@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useFetch } from "@vueuse/core";
 import { sanitizeQuery } from "../utils/object.ts";
 import ContributionCard from "../components/ui/ContributionCard.vue";
 import FormInput from "../components/ui/Form/FormInput.vue";
@@ -57,22 +56,12 @@ const resetFilters = () => {
 
 const fetchContributions = async () => {
   const url = `http://127.0.0.1:8000/contributions/?${new URLSearchParams(params.value)}`;
-  const { data } = await useFetch<ApiResponse>(url).get()
-
-  if (data.value) {
-    if (typeof data.value === 'string') {
-      try {
-        const parsed = JSON.parse(data.value)
-        contributions.value = parsed.contributions
-        total.value = parsed.total
-        limit.value = parsed.limit
-      } catch (e) {
-        console.error('Failed to parse response:', e)
-      }
-    } else {
-      contributions.value = data.value.contributions
-    }
-  }
+  const response = await fetch(url)
+  const data = await response.json() as ApiResponse
+  contributions.value = data.contributions
+  total.value = data.total
+  limit.value = data.limit
+  currentPage.value = params.value.page || 1
 }
 
 const pageTrigger = (page: number) => {
