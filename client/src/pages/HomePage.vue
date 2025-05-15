@@ -16,6 +16,8 @@ interface ApiResponse {
   limit: number;
 }
 
+const BASE_URL = import.meta.env.VITE_BASE_URL || "http://127.0.0.1:8000";
+
 const router = useRouter();
 const route = useRoute();
 
@@ -66,7 +68,7 @@ const resetFilters = () => {
 
 const fetchContributions = async () => {
   const queryString = new URLSearchParams(params.value as any).toString();
-  const url = `http://127.0.0.1:8000/contributions/?${queryString}`;
+  const url = `${BASE_URL}/contributions/?${queryString}`;
 
   const response = await fetch(url);
   const data = (await response.json()) as ApiResponse;
