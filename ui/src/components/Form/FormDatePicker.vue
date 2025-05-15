@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import IconCalendar from "../icons/IconCalendar.vue";
+import IconCalendar from '../icons/IconCalendar.vue'
 
 const props = defineProps({
   modelValue: {
