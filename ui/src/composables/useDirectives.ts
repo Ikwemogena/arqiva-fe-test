@@ -16,7 +16,7 @@ const vDebounce = {
   },
 }
 
-export const useDirectives = () =>{
+export const useDirectives = () => {
   return {
     vDebounce,
   }
