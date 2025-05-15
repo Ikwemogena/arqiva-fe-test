@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Contribution } from '../../types/contribution'
-import { formatDateRange } from '../../utils/date.ts'
-import IconCalendar from '../icons/IconCalendar.vue'
-import IconUser from '../icons/IconUser.vue'
+import type { Contribution } from '../types/contribution'
+import { formatDateRange } from '../utils/date.ts'
+import IconCalendar from './icons/IconCalendar.vue'
+import IconUser from './icons/IconUser.vue'
 
 defineProps<{
   contribution: Contribution
