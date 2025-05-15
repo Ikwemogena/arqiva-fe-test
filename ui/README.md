@@ -1,6 +1,4 @@
-# client
-
-This template should help get you started developing with Vue 3 in Vite.
+# Arqiva Frontend
 
 ## Recommended IDE Setup
 
@@ -26,4 +24,12 @@ pnpm dev
 
 ```sh
 pnpm build
+```
+
+### Running the Application
+
+1. First, make sure to start the backend server `/server` in a separate terminal:
+2. Then, in a new terminal, start the frontend development server `./ui`:
+```
+pnpm run dev
 ```
