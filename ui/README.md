@@ -29,7 +29,7 @@ pnpm build
 ### Running the Application
 
 1. First, make sure to start the backend server `/server` in a separate terminal:
-2. Then, in a new terminal, start the frontend development server `./ui`:
+2. Then, in a new terminal, start the frontend development server `/ui`:
 ```
 pnpm run dev
 ```
