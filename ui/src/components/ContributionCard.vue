@@ -8,7 +8,7 @@ defineProps<{
   contribution: Contribution
 }>()
 
-function getStatus(contribution: Contribution) {
+const getStatus = (contribution: Contribution) => {
   const now = new Date()
   const startTime = new Date(contribution.startTime)
   const endTime = new Date(contribution.endTime)

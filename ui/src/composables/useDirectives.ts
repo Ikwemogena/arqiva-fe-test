@@ -11,12 +11,12 @@ const vDebounce = {
       'input',
       useDebounceFn(() => {
         value(el.value)
-      }, arg ? Number.parseInt(arg) : 500),
+      }, arg ? parseInt(arg) : 500),
     )
   },
 }
 
-export function useDirectives() {
+export const useDirectives = () =>{
   return {
     vDebounce,
   }

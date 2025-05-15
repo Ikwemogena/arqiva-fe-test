@@ -2,11 +2,11 @@
 import type { Contribution } from '../types/contribution'
 import { computed, onMounted, ref, watch, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import Paginate from '../components/Paginate.vue'
 import ContributionCard from '../components/ContributionCard.vue'
 import FormDatePicker from '../components/Form/FormDatePicker.vue'
 import FormInput from '../components/Form/FormInput.vue'
 import FormSelect from '../components/Form/FormSelect.vue'
+import Paginate from '../components/Paginate.vue'
 import { sanitizeQuery } from '../utils/object.ts'
 
 interface ApiResponse {
@@ -49,7 +49,7 @@ const noResultCopy = computed(() => {
   return ''
 })
 
-function updateSearch(field: string, value: any) {
+const updateSearch = (field: string, value: any) => {
   params.value = sanitizeQuery({
     ...params.value,
     [field]: value,
@@ -57,7 +57,7 @@ function updateSearch(field: string, value: any) {
   })
 }
 
-function resetFilters() {
+const resetFilters = () => {
   setTimeout(() => {
     params.value = sanitizeQuery({
       limit: params.value.limit,
@@ -66,7 +66,7 @@ function resetFilters() {
   }, 300)
 }
 
-async function fetchContributions() {
+const fetchContributions = async () => {
   const queryString = new URLSearchParams(params.value as any).toString()
   const url = `${BASE_URL}/contributions/?${queryString}`
 
@@ -79,7 +79,7 @@ async function fetchContributions() {
   currentPage.value = params.value.page || 1
 }
 
-function pageTrigger(page: number) {
+const pageTrigger = (page: number) => {
   currentPage.value = page
   params.value = {
     ...params.value,

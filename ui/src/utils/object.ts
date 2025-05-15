@@ -3,7 +3,7 @@
  * @param {Record<string, any>} obj
  * @returns {Record<string, any>}
  */
-export function parseNumValues(obj: { [key: string]: any }): { [key: string]: any } {
+export const parseNumValues = (obj: { [key: string]: any }): { [key: string]: any } => {
   const parsedObj: { [key: string]: any } = {}
 
   for (const key in obj) {
@@ -28,7 +28,7 @@ export function parseNumValues(obj: { [key: string]: any }): { [key: string]: an
  * @param {Record<string, any>} obj
  * @returns {Record<string, any>}
  */
-export function removeEmptyKeys(obj: Record<string, any>, shallow = false): Record<string, any> {
+export const removeEmptyKeys = (obj: Record<string, any>, shallow = false): Record<string, any> => {
   for (const key in obj) {
     if (obj[key] === null || obj[key] === undefined || obj[key] === '') {
       delete obj[key]
@@ -48,6 +48,6 @@ export function removeEmptyKeys(obj: Record<string, any>, shallow = false): Reco
  * @param {Record<string, any>} obj
  * @returns {Record<string, any>}
  */
-export function sanitizeQuery(obj: Record<string, any>): Record<string, any> {
+export const sanitizeQuery = (obj: Record<string, any>): Record<string, any> => {
   return parseNumValues(removeEmptyKeys(obj))
 }

@@ -37,11 +37,11 @@ const dateValue = computed({
 
 const focused = ref(false)
 
-function handleFocus() {
+const handleFocus = () => {
   focused.value = true
 }
 
-function handleBlur() {
+const handleBlur = () => {
   focused.value = false
 }
 </script>
