@@ -53,35 +53,37 @@ const paginationRange = computed(() => {
 </script>
 
 <template>
-  <div class="pagination-wrapper" v-if="totalPages > 1">
-    <div class="pagination">
-      <button v-show="currentPage > 1" @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
-        Prev
-      </button>
+  <div style="display: flex; justify-content: space-between; width: 100%; padding: 1rem" v-if="totalPages > 1">
+      <div style="display: flex; gap: 1rem; align-items: center; justify-content: flex-end; width: 70%">
+        <div class="pagination">
+          <button v-show="currentPage > 1" @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
+            Prev
+          </button>
 
-      <button
-          v-for="(item, index) in paginationRange"
-          :key="index"
-          :disabled="item === '...'"
-          @click="typeof item === 'number' && goToPage(item)"
-          :class="{ active: item === currentPage }"
-      >
-        {{ item }}
-      </button>
+          <button
+              v-for="(item, index) in paginationRange"
+              :key="index"
+              :disabled="item === '...'"
+              @click="typeof item === 'number' && goToPage(item)"
+              :class="{ active: item === currentPage }"
+          >
+            {{ item }}
+          </button>
 
-      <button v-show="currentPage < totalPages" @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">
-        Next
-      </button>
-    </div>
+          <button v-show="currentPage < totalPages" @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">
+            Next
+          </button>
+        </div>
+      </div>
 
-    <div class="go-to-page" v-if="true">
-      <label for="page-select">Go to page:</label>
-      <select id="page-select" :value="currentPage" @change="goToPage($event?.target.value)">
-        <option v-for="page in totalPages" :key="page" :value="page">
-          {{ page }}
-        </option>
-      </select>
-    </div>
+      <div class="go-to-page" v-if="true">
+        <label for="page-select">Go to page:</label>
+        <select id="page-select" :value="currentPage" @change="goToPage(parseInt($event.target.value))">
+          <option v-for="page in totalPages" :key="page" :value="page">
+            {{ page }}
+          </option>
+        </select>
+      </div>
   </div>
 </template>
 
