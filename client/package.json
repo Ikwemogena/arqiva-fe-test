@@ -1,12 +1,14 @@
 {
   "name": "client",
+  "type": "module",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.ts,.js",
+    "lint:fix": "eslint . --ext .vue,.ts,.js --fix"
   },
   "dependencies": {
     "@vueuse/core": "^13.1.0",
@@ -14,11 +16,15 @@
     "vue-router": "4"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^4.13.0",
     "@vitejs/plugin-vue": "^5.2.3",
-    "vite-plugin-vue-devtools": "^7.7.2",
-    "@vue/tsconfig": "^0.7.0",
+    "eslint": "^9.26.0",
+    "eslint-plugin-format": "^1.0.1",
+    "globals": "^16.1.0",
     "typescript": "~5.8.3",
+    "typescript-eslint": "^8.32.1",
     "vite": "^6.3.5",
+    "vite-plugin-vue-devtools": "^7.7.2",
     "vue-tsc": "^2.2.8"
   }
 }

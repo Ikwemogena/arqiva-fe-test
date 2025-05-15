@@ -1,117 +1,120 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, watchEffect } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import { sanitizeQuery } from "../utils/object.ts";
-import ContributionCard from "../components/ui/ContributionCard.vue";
-import FormInput from "../components/ui/Form/FormInput.vue";
-import FormSelect from "../components/ui/Form/FormSelect.vue";
-import FormDatePicker from "../components/ui/Form/FormDatePicker.vue";
-import Paginate from "../components/Paginate.vue";
-import type { Contribution } from "../types/contribution";
+import type { Contribution } from '../types/contribution'
+import { computed, onMounted, ref, watch, watchEffect } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import Paginate from '../components/Paginate.vue'
+import ContributionCard from '../components/ui/ContributionCard.vue'
+import FormDatePicker from '../components/ui/Form/FormDatePicker.vue'
+import FormInput from '../components/ui/Form/FormInput.vue'
+import FormSelect from '../components/ui/Form/FormSelect.vue'
+import { sanitizeQuery } from '../utils/object.ts'
 
 interface ApiResponse {
-  contributions: Contribution[];
-  total: number;
-  skip: number;
-  limit: number;
+  contributions: Contribution[]
+  total: number
+  skip: number
+  limit: number
 }
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || "http://127.0.0.1:8000";
+const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://127.0.0.1:8000'
 
-const router = useRouter();
-const route = useRoute();
+const router = useRouter()
+const route = useRoute()
 
-const params = ref(sanitizeQuery(route.query));
-const contributions = ref<Contribution[]>([]);
-const showAdvancedFilters = ref(false);
+const params = ref(sanitizeQuery(route.query))
+const contributions = ref<Contribution[]>([])
+const showAdvancedFilters = ref(false)
 
-const total = ref(0);
-const limit = ref(0);
-const currentPage = ref(1);
+const total = ref(0)
+const limit = ref(0)
+const currentPage = ref(1)
 
 const sortOptions = [
-  { value: "id", label: "ID" },
-  { value: "title", label: "Title" },
-  { value: "description", label: "Description" },
-  { value: "startTime", label: "Start Time" },
-  { value: "endTime", label: "End Time" },
-  { value: "owner", label: "Owner" },
-];
+  { value: 'id', label: 'ID' },
+  { value: 'title', label: 'Title' },
+  { value: 'description', label: 'Description' },
+  { value: 'startTime', label: 'Start Time' },
+  { value: 'endTime', label: 'End Time' },
+  { value: 'owner', label: 'Owner' },
+]
 
 const noResultCopy = computed(() => {
-  const { title, description, owner } = params.value;
+  const { title, description, owner } = params.value
   if ((title || description || owner) && contributions.value.length === 0) {
-    return "No contributions found for your search criteria";
+    return 'No contributions found for your search criteria'
   }
   if (contributions.value.length === 0) {
-    return "No contributions found";
+    return 'No contributions found'
   }
-  return "";
-});
+  return ''
+})
 
-const updateSearch = (field: string, value: any) => {
+function updateSearch(field: string, value: any) {
   params.value = sanitizeQuery({
     ...params.value,
     [field]: value,
     page: undefined,
-  });
-};
+  })
+}
 
-const resetFilters = () => {
+function resetFilters() {
   setTimeout(() => {
     params.value = sanitizeQuery({
       limit: params.value.limit,
-      order_by: "id",
-    });
-  }, 300);
-};
+      order_by: 'id',
+    })
+  }, 300)
+}
 
-const fetchContributions = async () => {
-  const queryString = new URLSearchParams(params.value as any).toString();
-  const url = `${BASE_URL}/contributions/?${queryString}`;
+async function fetchContributions() {
+  const queryString = new URLSearchParams(params.value as any).toString()
+  const url = `${BASE_URL}/contributions/?${queryString}`
 
-  const response = await fetch(url);
-  const data = (await response.json()) as ApiResponse;
+  const response = await fetch(url)
+  const data = (await response.json()) as ApiResponse
 
-  contributions.value = data.contributions;
-  total.value = data.total;
-  limit.value = data.limit;
-  currentPage.value = params.value.page || 1;
-};
+  contributions.value = data.contributions
+  total.value = data.total
+  limit.value = data.limit
+  currentPage.value = params.value.page || 1
+}
 
-const pageTrigger = (page: number) => {
-  currentPage.value = page;
+function pageTrigger(page: number) {
+  currentPage.value = page
   params.value = {
     ...params.value,
     page,
     skip: (page - 1) * limit.value,
-  };
-};
+  }
+}
 
 watchEffect(() => {
-  router.push({ query: { ...params.value } });
-});
+  router.push({ query: { ...params.value } })
+})
 
 watch(
-    params,
-    () => {
-      fetchContributions();
-    },
-    { deep: true }
-);
+  params,
+  () => {
+    fetchContributions()
+  },
+  { deep: true },
+)
 
 onMounted(() => {
-  fetchContributions();
+  fetchContributions()
 
-  if (!params.value.limit) params.value.limit = 14;
-  if (!params.value.order_by) params.value.order_by = "id";
-  if (!params.value.page) params.value.page = 1;
+  if (!params.value.limit)
+    params.value.limit = 14
+  if (!params.value.order_by)
+    params.value.order_by = 'id'
+  if (!params.value.page)
+    params.value.page = 1
 
   if (params.value.page) {
-    currentPage.value = params.value.page;
-    params.value.skip = (params.value.page - 1) * params.value.limit;
+    currentPage.value = params.value.page
+    params.value.skip = (params.value.page - 1) * params.value.limit
   }
-});
+})
 </script>
 
 <template>
@@ -119,9 +122,9 @@ onMounted(() => {
     <div class="search-container">
       <div class="search-row">
         <FormInput
-            v-debounce:300ms="(val) => updateSearch('title', val)"
-            placeholder="Search by title"
-            :value="params.title"
+          v-debounce:300ms="(val) => updateSearch('title', val)"
+          placeholder="Search by title"
+          :value="params.title"
         />
         <button class="toggle-filters" @click="showAdvancedFilters = !showAdvancedFilters">
           {{ showAdvancedFilters ? 'Hide' : 'Show' }} Advanced Filters
@@ -132,14 +135,14 @@ onMounted(() => {
         <div v-if="showAdvancedFilters" class="advanced-filters">
           <div class="filter-row">
             <FormInput
-                v-debounce:300ms="(val) => updateSearch('description', val)"
-                placeholder="Filter by description"
-                :value="params.description"
+              v-debounce:300ms="(val) => updateSearch('description', val)"
+              placeholder="Filter by description"
+              :value="params.description"
             />
             <FormInput
-                v-debounce:300ms="(val) => updateSearch('owner', val)"
-                placeholder="Filter by owner"
-                :value="params.owner"
+              v-debounce:300ms="(val) => updateSearch('owner', val)"
+              placeholder="Filter by owner"
+              :value="params.owner"
             />
           </div>
 
@@ -148,18 +151,18 @@ onMounted(() => {
               <div>
                 <span>Start date before:</span>
                 <FormDatePicker
-                    v-model="params.startBefore"
-                    @update:model-value="(val) => updateSearch('startBefore', val)"
-                    placeholder="From"
+                  v-model="params.startBefore"
+                  placeholder="From"
+                  @update:model-value="(val) => updateSearch('startBefore', val)"
                 />
               </div>
 
               <div>
                 <span>Start date after:</span>
                 <FormDatePicker
-                    v-model="params.startAfter"
-                    @update:model-value="(val) => updateSearch('startAfter', val)"
-                    placeholder="To"
+                  v-model="params.startAfter"
+                  placeholder="To"
+                  @update:model-value="(val) => updateSearch('startAfter', val)"
                 />
               </div>
             </div>
@@ -168,18 +171,18 @@ onMounted(() => {
               <div>
                 <span>End date before:</span>
                 <FormDatePicker
-                    v-model="params.endBefore"
-                    @update:model-value="(val) => updateSearch('endBefore', val)"
-                    placeholder="From"
+                  v-model="params.endBefore"
+                  placeholder="From"
+                  @update:model-value="(val) => updateSearch('endBefore', val)"
                 />
               </div>
 
               <div>
                 <span>End date after:</span>
                 <FormDatePicker
-                    v-model="params.endAfter"
-                    @update:model-value="(val) => updateSearch('endAfter', val)"
-                    placeholder="To"
+                  v-model="params.endAfter"
+                  placeholder="To"
+                  @update:model-value="(val) => updateSearch('endAfter', val)"
                 />
               </div>
             </div>
@@ -189,8 +192,8 @@ onMounted(() => {
             <div class="sort-option">
               <span>Sort by:</span>
               <FormSelect
-                  :options="sortOptions"
-                  v-model:selected="params.order_by"
+                v-model:selected="params.order_by"
+                :options="sortOptions"
               />
             </div>
             <button class="reset-button" @click="resetFilters">
@@ -202,11 +205,11 @@ onMounted(() => {
     </div>
 
     <div class="content-container">
-      <div class="contributions__grid" v-if="contributions.length">
+      <div v-if="contributions.length" class="contributions__grid">
         <ContributionCard
-            v-for="(contribution, index) in contributions"
-            :key="index"
-            :contribution="contribution"
+          v-for="(contribution, index) in contributions"
+          :key="index"
+          :contribution="contribution"
         />
       </div>
       <div v-else class="no-results">
@@ -214,12 +217,12 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="pagination-wrapper" v-if="contributions.length">
+    <div v-if="contributions.length" class="pagination-wrapper">
       <Paginate
-          :total="total"
-          :limit="limit"
-          :currentPage="currentPage"
-          @update:page="pageTrigger"
+        :total="total"
+        :limit="limit"
+        :current-page="currentPage"
+        @update:page="pageTrigger"
       />
     </div>
   </div>
@@ -231,7 +234,7 @@ onMounted(() => {
   background-color: #f9f9f9;
   border-radius: 8px;
   margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .search-row {
@@ -317,8 +320,8 @@ onMounted(() => {
   justify-content: center;
 }
 
-
-.slide-enter-active, .slide-leave-active {
+.slide-enter-active,
+.slide-leave-active {
   transition: all 0.3s ease;
   overflow: hidden;
 }
@@ -344,7 +347,6 @@ onMounted(() => {
   padding-bottom: 0;
   opacity: 0;
 }
-
 
 @media (min-width: 600px) {
   .contributions__grid {

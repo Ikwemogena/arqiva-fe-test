@@ -1,71 +1,71 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref } from 'vue'
 
 const props = defineProps({
   modelValue: {
     type: String,
-    default: ''
+    default: '',
   },
   placeholder: {
     type: String,
-    default: 'Select date'
+    default: 'Select date',
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   required: {
     type: Boolean,
-    default: false
+    default: false,
   },
   min: {
     type: String,
-    default: ''
+    default: '',
   },
   max: {
     type: String,
-    default: ''
-  }
-});
+    default: '',
+  },
+})
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue'])
 
 const dateValue = computed({
   get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
-});
+  set: value => emit('update:modelValue', value),
+})
 
-const focused = ref(false);
+const focused = ref(false)
 
-const handleFocus = () => {
-  focused.value = true;
-};
+function handleFocus() {
+  focused.value = true
+}
 
-const handleBlur = () => {
-  focused.value = false;
-};
+function handleBlur() {
+  focused.value = false
+}
 </script>
 
 <template>
-  <div class="form-date-container" :class="{ 'focused': focused }">
+  <div class="form-date-container" :class="{ focused }">
     <input
-        type="date"
-        class="form-date"
-        v-model="dateValue"
-        :placeholder="placeholder"
-        :disabled="disabled"
-        :required="required"
-        :min="min"
-        :max="max"
-        @focus="handleFocus"
-        @blur="handleBlur"
-    />
+      v-model="dateValue"
+      type="date"
+      class="form-date"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      :required="required"
+      :min="min"
+      :max="max"
+      @focus="handleFocus"
+      @blur="handleBlur"
+    >
     <div class="date-icon">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-        <line x1="16" y1="2" x2="16" y2="6"></line>
-        <line x1="8" y1="2" x2="8" y2="6"></line>
-        <line x1="3" y1="10" x2="21" y2="10"></line>
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+        <line x1="16" y1="2" x2="16" y2="6" />
+        <line x1="8" y1="2" x2="8" y2="6" />
+        <line x1="3" y1="10" x2="21" y2="10" />
       </svg>
     </div>
   </div>
@@ -85,7 +85,9 @@ const handleBlur = () => {
   border-radius: 20px;
   background-color: #fff;
   color: #4a5568;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 .form-date:focus {

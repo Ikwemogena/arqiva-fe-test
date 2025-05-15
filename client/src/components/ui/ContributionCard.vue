@@ -1,46 +1,52 @@
 <script setup lang="ts">
-
-import IconCalendar from "../icons/IconCalendar.vue";
-import IconUser from "../icons/IconUser.vue";
-import type { Contribution } from "../../types/contribution";
-import { formatDateRange } from "../../utils/date.ts";
+import type { Contribution } from '../../types/contribution'
+import { formatDateRange } from '../../utils/date.ts'
+import IconCalendar from '../icons/IconCalendar.vue'
+import IconUser from '../icons/IconUser.vue'
 
 defineProps<{
-  contribution: Contribution;
+  contribution: Contribution
 }>()
 
-const getStatus = (contribution: Contribution) => {
-  const now = new Date();
-  const startTime = new Date(contribution.startTime);
-  const endTime = new Date(contribution.endTime);
+function getStatus(contribution: Contribution) {
+  const now = new Date()
+  const startTime = new Date(contribution.startTime)
+  const endTime = new Date(contribution.endTime)
 
   if (now < startTime) {
-    return 'scheduled';
-  } else if (now >= startTime && now <= endTime) {
-    return 'active';
-  } else {
-    return 'completed';
+    return 'scheduled'
+  }
+  else if (now >= startTime && now <= endTime) {
+    return 'active'
+  }
+  else {
+    return 'completed'
   }
 }
-
 </script>
 
 <template>
   <div class="contribution__card">
     <div style="display: flex; flex-direction: column; gap: 0.4rem">
       <div class="contribution__header">
-        <h3 class="contribution__card-title">{{ contribution.title }}</h3>
+        <h3 class="contribution__card-title">
+          {{ contribution.title }}
+        </h3>
         <div>
-          <p class="status" :class="getStatus(contribution) ">{{ getStatus(contribution) }}</p>
+          <p class="status" :class="getStatus(contribution) ">
+            {{ getStatus(contribution) }}
+          </p>
         </div>
       </div>
-      <p class="contribution__card-description">{{ contribution.description }}</p>
+      <p class="contribution__card-description">
+        {{ contribution.description }}
+      </p>
     </div>
 
     <div style="color: #545e6b; display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.9rem">
       <div style="display: flex; align-items: center; gap: 0.5rem;">
         <IconCalendar style="color: #000;" />
-        <p>{{formatDateRange(contribution.startTime, contribution.endTime)}}</p>
+        <p>{{ formatDateRange(contribution.startTime, contribution.endTime) }}</p>
       </div>
 
       <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -63,15 +69,15 @@ const getStatus = (contribution: Contribution) => {
   border: 1px solid #d8d5d5;
   border-radius: 0.75rem;
   cursor: pointer;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
   transition:
-      transform 0.14s cubic-bezier(.4,2,.6,1),
-      box-shadow 0.13s;
+    transform 0.14s cubic-bezier(0.4, 2, 0.6, 1),
+    box-shadow 0.13s;
 }
 
 .contribution__card:hover {
   transform: translateY(-5px) scale(1.018);
-  box-shadow: 0 5px 32px rgba(0,0,0,0.13);
+  box-shadow: 0 5px 32px rgba(0, 0, 0, 0.13);
   border: 1px solid #dddddd;
 }
 
@@ -84,7 +90,7 @@ const getStatus = (contribution: Contribution) => {
 .contribution__card-title {
   font-size: 1.4rem;
   font-weight: bold;
-  color: #1A202C;
+  color: #1a202c;
   margin: 0;
 }
 

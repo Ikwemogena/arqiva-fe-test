@@ -3,22 +3,24 @@
  * @param {Record<string, any>} obj
  * @returns {Record<string, any>}
  */
-export const parseNumValues = (obj: { [key: string]: any }): { [key: string]: any } => {
-    const parsedObj: { [key: string]: any } = {}
+export function parseNumValues(obj: { [key: string]: any }): { [key: string]: any } {
+  const parsedObj: { [key: string]: any } = {}
 
-    for (const key in obj) {
-        const value = obj[key]
+  for (const key in obj) {
+    const value = obj[key]
 
-        if (typeof value === 'object' && value !== null) {
-            parsedObj[key] = parseNumValues(value)
-        } else if (!isNaN(Number(value))) {
-            parsedObj[key] = Number(value)
-        } else {
-            parsedObj[key] = value
-        }
+    if (typeof value === 'object' && value !== null) {
+      parsedObj[key] = parseNumValues(value)
     }
+    else if (!isNaN(Number(value))) {
+      parsedObj[key] = Number(value)
+    }
+    else {
+      parsedObj[key] = value
+    }
+  }
 
-    return parsedObj
+  return parsedObj
 }
 
 /**
@@ -26,18 +28,19 @@ export const parseNumValues = (obj: { [key: string]: any }): { [key: string]: an
  * @param {Record<string, any>} obj
  * @returns {Record<string, any>}
  */
-export const removeEmptyKeys = (obj: Record<string, any>, shallow = false): Record<string, any> => {
-    for (const key in obj) {
-        if (obj[key] === null || obj[key] === undefined || obj[key] === '') {
-            delete obj[key]
-        } else if (typeof obj[key] === 'object' && !shallow) {
-            removeEmptyKeys(obj[key])
-            if (Object.keys(obj[key]).length === 0) {
-                delete obj[key]
-            }
-        }
+export function removeEmptyKeys(obj: Record<string, any>, shallow = false): Record<string, any> {
+  for (const key in obj) {
+    if (obj[key] === null || obj[key] === undefined || obj[key] === '') {
+      delete obj[key]
     }
-    return obj
+    else if (typeof obj[key] === 'object' && !shallow) {
+      removeEmptyKeys(obj[key])
+      if (Object.keys(obj[key]).length === 0) {
+        delete obj[key]
+      }
+    }
+  }
+  return obj
 }
 
 /**
@@ -45,6 +48,6 @@ export const removeEmptyKeys = (obj: Record<string, any>, shallow = false): Reco
  * @param {Record<string, any>} obj
  * @returns {Record<string, any>}
  */
-export const sanitizeQuery = (obj: Record<string, any>): Record<string, any> => {
-    return parseNumValues(removeEmptyKeys(obj))
+export function sanitizeQuery(obj: Record<string, any>): Record<string, any> {
+  return parseNumValues(removeEmptyKeys(obj))
 }
