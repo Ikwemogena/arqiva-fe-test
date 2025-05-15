@@ -35,7 +35,7 @@ describe('pagination', () => {
   })
 
   it('emits page-change event when clicking page button', async () => {
-    const wrapper = createWrapper(50, 10,1)
+    const wrapper = createWrapper(50, 10, 1)
     const pageButton = wrapper.findAll('button').find(b => b.text() === '2')
 
     await pageButton?.trigger('click')
